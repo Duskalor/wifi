@@ -40,19 +40,41 @@ def connect_to_wifi(ssid, password):
 
 
 # Configuración de la red Wi-Fi
-SSID = "Soporte_CELLSHOP_2.4Ghz"
-SSID2 = "Soporte_CELLSHOP_5G"
-PASSWORD = "41162910"
+# SSID = "Soporte_CELLSHOP_2.4Ghz"
+# SSID2 = "Soporte_CELLSHOP_5G"
+# PASSWORD = "41162910"
 
 # Intentar conectar a la red
 # connect_to_wifi(SSID, PASSWORD)
 
 
 def wifi():
-    print(f"trying to connect with : {SSID2}")
-    result = connect_to_wifi(SSID2, PASSWORD)
-    if(result == 0):
-       print(f"\nnot work !! trying with another one : {SSID}")
-       connect_to_wifi(SSID, PASSWORD)
+    # Abre el archivo en modo lectura
+    with open('wifi.txt', 'r') as file:
+    # Lee cada línea del archivo
+        for line in file:
+        # Divide la línea en palabras usando ',' como separador
+            words = line.split(', ')
+            # print(words)
+            # Itera sobre las palabras y busca las que contienen 'SSID' y 'pass'
+            ssid = None
+            password = None
+            for word in words:
+                if 'SSID' in word:
+                    # Extrae el SSID eliminando 'SSID: ' de la palabra
+                    ssid = word.split(': ')[1]                
+                elif 'PASS' in word:
+                    # Extrae la contraseña eliminando 'pass: ' de la palabra
+                    password = word.split(': ')[1]
+
+            # Imprime la información
+            # print(ssid)
+            if ssid and password:
+                print(f"trying to connect with : {ssid}")
+                result = connect_to_wifi(ssid, password)
+                if(result != 0) : break
+                if(result == 0):
+                    print(f"\nnot work !! trying with another one ")                   
+
     
 wifi()
